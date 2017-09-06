@@ -129,9 +129,7 @@ public class SudokuSolve {
 						}
 					}
 				}
-			}
-			
-			if (row == 1 || row == 4 || row == 7) {
+			} else if (row == 1 || row == 4 || row == 7) {
 				if (column == 2 || column == 5 || column == 8) {
 					for (int i = 1; i <= 2; i++) {
 						if (board[row-1][column-i].equals(num)) {
@@ -165,9 +163,7 @@ public class SudokuSolve {
 					}
 				}			
 				
-			}
-			
-			if (row == 1 || row == 4 || row == 7) {
+			} else if (row == 1 || row == 4 || row == 7) {
 				if (column == 0 || column == 3 || column == 6) {
 					for (int i = 1; i <= 2; i++) {
 						if (board[row-1][column+i].equals(num)) {
