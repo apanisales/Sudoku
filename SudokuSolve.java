@@ -1,4 +1,3 @@
-
 //Author: Anthony Panisales
 
 import java.util.InputMismatchException;
