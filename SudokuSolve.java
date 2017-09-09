@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-//Class Purpose: Produces a 9x9 sudoku game board
+//Class Purpose: Produces a 9x9 Sudoku game board
 public class SudokuSolve {
 	
 	protected static String[][] board = new String[9][9];
@@ -13,7 +13,7 @@ public class SudokuSolve {
 	Random randomNumber = new Random();
 	protected static int[] sudokuNums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-	//Function Purpose: Fills the sudoku board with numbers
+	//Function Purpose: Fills the Sudoku board with numbers
 	protected boolean fillBoard(int row, int column) {
 		//Base Case
 		if (row == 9) {
@@ -129,7 +129,9 @@ public class SudokuSolve {
 						}
 					}
 				}
-			} else if (row == 1 || row == 4 || row == 7) {
+			}
+			
+			if (row == 1 || row == 4 || row == 7) {
 				if (column == 2 || column == 5 || column == 8) {
 					for (int i = 1; i <= 2; i++) {
 						if (board[row-1][column-i].equals(num)) {
@@ -163,7 +165,9 @@ public class SudokuSolve {
 					}
 				}			
 				
-			} else if (row == 1 || row == 4 || row == 7) {
+			}
+			
+			if (row == 1 || row == 4 || row == 7) {
 				if (column == 0 || column == 3 || column == 6) {
 					for (int i = 1; i <= 2; i++) {
 						if (board[row-1][column+i].equals(num)) {
@@ -231,47 +235,53 @@ public class SudokuSolve {
 	}
 
 	public static void main(String[] args) {
-		String response1 = "";
-		String response2 = "";
 		Scanner scan = new Scanner(System.in);
 		SudokuSolve sudoku = new SudokuSolve();
-		
-		sudoku.fillBoard(0, 0);
-		sudoku.copyBoard();
-		sudoku.hideNums();
-		System.out.println("Let's play sudoku!");
-		while(!response1.equals("answer")) {
-			try {
-				sudoku.printBoard(unsolvedBoard);
-				System.out.println("\n" + "Enter the row and column you want to change or "
-						+ "type 'answer' to see the answer");
-				System.out.println("The rows and the columns are from 1-9");
-				System.out.print("Row: ");
-				response1 = scan.next().toLowerCase();
-				if (response1.equals("answer")) {
-					break;
-				}
-				System.out.print("Column: ");
-				response2 = scan.next().toLowerCase();
-				if (response2.equals("answer")) {
-					break;
-				}
-				if (contains(Integer.parseInt(response1), sudokuNums) && contains(Integer.parseInt(response2), sudokuNums)) {
-					if (!xBoard[Integer.parseInt(response1)-1][Integer.parseInt(response2)-1].equals("x")) {
-						System.out.println("That spot has a fixed number");
-					} else {
-						sudoku.solve(response1, response2, scan);
+		String play = "y";
+		while (play.equals("y")) {
+			String response1 = "";
+			String response2 = "";
+			sudoku.fillBoard(0, 0);
+			sudoku.copyBoard();
+			sudoku.hideNums();
+			System.out.println("Let's play sudoku!");
+			while(!response1.equals("answer")) {
+				try {
+					sudoku.printBoard(unsolvedBoard);
+					System.out.println("\n" + "Enter the row and column you want to change or "
+							+ "type 'answer' to see the answer");
+					System.out.println("The rows and the columns are from 1-9");
+					System.out.print("Row: ");
+					response1 = scan.next().toLowerCase();
+					if (response1.equals("answer")) {
+						break;
 					}
-				} else {
-					System.out.println("No such row or column exists");
+					System.out.print("Column: ");
+					response2 = scan.next().toLowerCase();
+					if (response2.equals("answer")) {
+						break;
+					}
+					if (contains(Integer.parseInt(response1), sudokuNums) && contains(Integer.parseInt(response2), sudokuNums)) {
+						if (!xBoard[Integer.parseInt(response1)-1][Integer.parseInt(response2)-1].equals("x")) {
+							System.out.println("That spot has a fixed number");
+						} else {
+							sudoku.solve(response1, response2, scan);
+						}
+					} else {
+						System.out.println("No such row and/or column exists");
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Error: Invalid input");
+					continue;
 				}
-			} catch (NumberFormatException e) {
-				System.out.println("Error: Invalid input");
-				continue;
 			}
+			sudoku.printBoard(board);
+			System.out.print("\n" + "Do you want to play again?(y/n) ");
+			play = scan.next();
+			System.out.println();
 		}
 		scan.close();
-		sudoku.printBoard(board);
+		System.out.println("Thanks for playing!");
 	}
 
 }
