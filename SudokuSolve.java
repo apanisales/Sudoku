@@ -83,7 +83,7 @@ public class SudokuSolve {
 		for (int row = 0; row < 9; row++) {
 			for (int column = 0; column < 9; column++) {
 				int num = randomNumber.nextInt(2);
-				if (num == 0 && count > limit) {
+				if (num == 1 && count > limit) {
 					unsolvedBoard[row][column] = "x";
 					xBoard[row][column] = "x";
 					count--;
