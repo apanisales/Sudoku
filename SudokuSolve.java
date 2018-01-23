@@ -1,59 +1,60 @@
-//Author: Anthony Panisales
-
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-//Class Purpose: Produces a 9x9 Sudoku game board
+/**Class Purpose: Produces a 9x9 Sudoku game board
+ * that can be solved
+ * 
+ * @author anthony panisales
+ *
+ */
 public class SudokuSolve {
 	
 	protected static String[][] board = new String[9][9];
 	protected static String[][] unsolvedBoard = new String[9][9];
 	protected static String[][] xBoard = new String [9][9];
-	Random randomNumber = new Random();
 	protected static int[] sudokuNums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-	//Function Purpose: Fills the Sudoku board with numbers
-	protected boolean fillBoard(int row, int column) {
+	/**
+	 * Function Purpose: Fills the Sudoku board with numbers
+	 */
+	public boolean fillBoard() {
+		return fillBoard(0,0);
+	}
+	
+	public boolean fillBoard(int row, int column) {
 		//Base Case
 		if (row == 9) {
 			return true;
 		} else { //Step Case
 			/*Each spot in the first row has a random number
-			 * from 1 to 9
-			 */
+			from 1 to 9*/
+			Random randomNumber = new Random();
 			if (row == 0) {
 				String num = Integer.toString(randomNumber.nextInt(9) + 1);
-				while (!safeToPlace(row, column, num)) {
+				while (!safeToPlace(row, column, num))
 					num = Integer.toString(randomNumber.nextInt(9) + 1);
-				}
+				board[row][column] = num;
 				if (column != 8) {
-					board[row][column] = num;
-					if (fillBoard(row, column+1)) {
+					if (fillBoard(row, column+1))
 						return true;
-					}
 				} else {
-					board[row][column] = num;
-					if (fillBoard(row+1, 0)) {
+					if (fillBoard(row+1, 0))
 						return true;
-					} 
 				}
 				return false;
 			} else { //Each row after the first reacts to the rows above it
 				for (int s = 0; s < sudokuNums.length; s++) {
 					/*If a number is not safe to place then the number that follows
-					 * it in the array sudokuNums will be checked
-					 */
+					 it in the array sudokuNums will be checked */
 					if (safeToPlace(row, column, Integer.toString(sudokuNums[s]))) {
 						board[row][column] = Integer.toString(sudokuNums[s]);
 						if (column != 8) {
-							if (fillBoard(row, column+1)) {
+							if (fillBoard(row, column+1))
 								return true;
-							}
 						} else {
-							if (fillBoard(row+1, 0)) {
+							if (fillBoard(row+1, 0))
 								return true;
-							} 
 						}
 					}
 				}
@@ -62,25 +63,30 @@ public class SudokuSolve {
 		}
 	}
 	
-	/*Function Purpose: Makes a copy of the original board*/
+	/**
+	 * Function Purpose: Makes a copy of the original board
+	 */
 	protected void copyBoard() {
-		for (int row = 0; row < unsolvedBoard.length; row++) {
-			for (int column = 0; column < unsolvedBoard.length; column++) {
-				unsolvedBoard[row][column] = board[row][column];
-			}
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++)
+				unsolvedBoard[i][j] = board[i][j];
 		}
 	}
 	
-	/*Function Purpose: Hides several numbers on the copy of the
+	/**Function Purpose: Hides several numbers on the copy of the
 	 * original board
 	 */
 	protected void hideNums() { 
-		for (int row = 0; row < unsolvedBoard.length; row++) {
-			for (int column = 0; column < unsolvedBoard.length; column++) {
+		//17 is the minimum number of visible spots on the board
+		int limit = 17, count = 81;
+		Random randomNumber = new Random();
+		for (int row = 0; row < 9; row++) {
+			for (int column = 0; column < 9; column++) {
 				int num = randomNumber.nextInt(2);
-				if (num == 0) {
+				if (num == 0 && count > limit) {
 					unsolvedBoard[row][column] = "x";
 					xBoard[row][column] = "x";
+					count--;
 				} else {
 					xBoard[row][column] = "0";
 				}
@@ -88,105 +94,44 @@ public class SudokuSolve {
 		}
 	}
 	
-	/*Function Purpose: Checks if a specific number is safe to
+	/**Function Purpose: Checks if a specific number is safe to
 	 * be placed at a specific spot on the board
 	 */
 	protected boolean safeToPlace(int row, int column, String num) {
+		int startRow = row - (row % 3);
+		int startCol = column - (column % 3);
+		
 		//Check up
-		if (row != 0) {
-			for (int i = 1; i <= row; i++) {
-				if (board[row-i][column].equals(num)) {
-					return false;
-				}
-			}
+		for (int i = 1; i <= row; i++) {
+			if (board[row-i][column].equals(num))
+				return false;
 		}
 		
 		//Check left
-		if (column != 0) {
-			for (int i = 1; i <= column; i++) {
-				if (board[row][column-i].equals(num)) {
+		for (int i = 1; i <= column; i++) {
+			if (board[row][column-i].equals(num))
+				return false;
+		}
+		
+		//Check subgrid
+		for (int i = startRow; i < row; i++) {
+			for (int j = startCol; j < startCol+3; j++) {
+				if (board[i][j].equals(num))
 					return false;
-				}
 			}
 		}
 		
-		
-		//Check left up diagonal
-		if (column != 0 && column != 3 && column != 6) {
-			if (row == 2 || row == 5 || row == 8) {
-				if (column == 2 || column == 5 || column == 8) {
-					for (int i = 1; i <= 2; i++) {
-						for(int j = 1; j <=2; j++) {
-							if (board[row-i][column-j].equals(num)) {
-								return false;
-							}
-						}
-					}
-				} else {
-					for (int i = 1; i <= 2; i++) {
-						if (board[row-i][column-1].equals(num)) {
-							return false;
-						}
-					}
-				}
-			} else if (row == 1 || row == 4 || row == 7) {
-				if (column == 2 || column == 5 || column == 8) {
-					for (int i = 1; i <= 2; i++) {
-						if (board[row-1][column-i].equals(num)) {
-							return false;
-						}
-					}
-				} else {
-					if (board[row-1][column-1].equals(num)) {
-						return false;
-					}
-				}
-			}
-		}
-		
-		//Check right up diagonal
-		if (row != 0 && column != 2 && column != 5 && column != 8) {
-			if (row == 2 || row == 5 || row == 8) {
-				if (column == 0 || column == 3 || column == 6) {
-					for (int i = 1; i <= 2; i++) {
-						for(int j = 1; j <=2; j++) {
-							if (board[row-i][column+j].equals(num)) {
-								return false;
-							}
-						}
-					}
-				} else {
-					for (int i = 1; i <= 2; i++) {
-						if (board[row-i][column+1].equals(num)) {
-							return false;
-						}
-					}
-				}			
-				
-			} else if (row == 1 || row == 4 || row == 7) {
-				if (column == 0 || column == 3 || column == 6) {
-					for (int i = 1; i <= 2; i++) {
-						if (board[row-1][column+i].equals(num)) {
-							return false;
-						}
-					}
-				} else {
-					if (board[row-1][column+1].equals(num)) {
-						return false;
-					}
-				}
-			}
-		}
 		return true;
 	}
 
-	//Function Purpose: Prints the solved sudoku game board
-	protected void printBoard(String[][] specficBoard) {
+	/**Function Purpose: Prints a sudoku game board
+	 */
+	public void printBoard(String[][] specficBoard) {
 		System.out.print(" -----------------------" + "\n" + "| ");
 		for (int row = 0; row < specficBoard.length; row++) {
 			for (int column = 0; column < specficBoard[0].length; column++) {
-				if (column != 0 && column%8 == 0) {
-					if (row == 2 || row == 5) {
+				if (column != 0 && column % 8 == 0) {
+					if (row % 3 == 2) {
 						System.out.print(specficBoard[row][column] + " |" + "\n");
 						System.out.print(" -----------------------" + "\n" + "| ");
 					} else if (row == 8) {
@@ -196,26 +141,27 @@ public class SudokuSolve {
 					}
 				} else {
 					System.out.print(specficBoard[row][column] + " ");
-					if (column == 2 || column == 5) {
+					if (column % 3 == 2)
 						System.out.print("| ");
-					}
 				}
 			}
 		}
 	}
 	
-	/*Function Purpose: Checks if an element is in an array*/
+	/**
+	 * Function Purpose: Checks if an integer is in an integer array
+	 */
 	protected static boolean contains(int num, int[] array) {
 		for (int i = 0; i < array.length; i++) {
-			if (num == array[i]) {
+			if (num == array[i])
 				return true;
-			}
 		}
 		return false;
 	}
 	
-	/*Function Purpose: Adds a number of the user's choosing
-	 * to the copy of the original board*/
+	/**Function Purpose: Adds a number of the user's choosing
+	 * to the copy of the original board
+	 */
 	protected void solve(String row, String column, Scanner scan) {
 		int num = 0;
 		while (!contains(num, sudokuNums)) {
@@ -237,7 +183,7 @@ public class SudokuSolve {
 		while (play.equals("y")) {
 			String response1 = "";
 			String response2 = "";
-			sudoku.fillBoard(0, 0);
+			sudoku.fillBoard();
 			sudoku.copyBoard();
 			sudoku.hideNums();
 			System.out.println("Let's play sudoku!");
@@ -249,20 +195,17 @@ public class SudokuSolve {
 					System.out.println("The rows and the columns are from 1-9");
 					System.out.print("Row: ");
 					response1 = scan.next().toLowerCase();
-					if (response1.equals("answer")) {
+					if (response1.equals("answer"))
 						break;
-					}
 					System.out.print("Column: ");
 					response2 = scan.next().toLowerCase();
-					if (response2.equals("answer")) {
+					if (response2.equals("answer"))
 						break;
-					}
 					if (contains(Integer.parseInt(response1), sudokuNums) && contains(Integer.parseInt(response2), sudokuNums)) {
-						if (!xBoard[Integer.parseInt(response1)-1][Integer.parseInt(response2)-1].equals("x")) {
+						if (!xBoard[Integer.parseInt(response1)-1][Integer.parseInt(response2)-1].equals("x"))
 							System.out.println("That spot has a fixed number");
-						} else {
+						else
 							sudoku.solve(response1, response2, scan);
-						}
 					} else {
 						System.out.println("No such row and/or column exists");
 					}
@@ -279,5 +222,4 @@ public class SudokuSolve {
 		scan.close();
 		System.out.println("Thanks for playing!");
 	}
-
 }
