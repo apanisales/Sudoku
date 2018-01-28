@@ -2,7 +2,8 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-/**Class Purpose: Produces a 9x9 Sudoku game board
+/**
+ * Class Purpose: Produces a 9x9 Sudoku game board
  * that can be solved
  * 
  * @author anthony panisales
@@ -73,7 +74,8 @@ public class SudokuSolve {
 		}
 	}
 	
-	/**Function Purpose: Hides several numbers on the copy of the
+	/**
+	 * Function Purpose: Hides several numbers on the copy of the
 	 * original board
 	 */
 	protected void hideNums() { 
@@ -94,7 +96,8 @@ public class SudokuSolve {
 		}
 	}
 	
-	/**Function Purpose: Checks if a specific number is safe to
+	/** 
+	 * Function Purpose: Checks if a specific number is safe to
 	 * be placed at a specific spot on the board
 	 */
 	protected boolean safeToPlace(int row, int column, String num) {
@@ -124,7 +127,8 @@ public class SudokuSolve {
 		return true;
 	}
 
-	/**Function Purpose: Prints a sudoku game board
+	/**
+	 * Function Purpose: Prints a sudoku game board
 	 */
 	public void printBoard(String[][] specficBoard) {
 		System.out.print(" -----------------------" + "\n" + "| ");
@@ -159,7 +163,8 @@ public class SudokuSolve {
 		return false;
 	}
 	
-	/**Function Purpose: Adds a number of the user's choosing
+	/**
+	 * Function Purpose: Adds a number of the user's choosing
 	 * to the copy of the original board
 	 */
 	protected void solve(String row, String column, Scanner scan) {
