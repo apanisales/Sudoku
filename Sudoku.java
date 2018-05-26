@@ -24,6 +24,16 @@ public class Sudoku {
 		return fillBoard(0,0);
 	}
 	
+	/**
+	 * Helper method for fillBoard.
+	 * 
+	 * @param row
+	 *           row of the specific position to fill
+	 * @param column
+	 *           column of the specific position to fill
+	 * 
+	 * @return true if filling the board was successful, false otherwise
+	 */
 	public boolean fillBoard(int row, int column) {
 		// Base Case
 		if (row == 9) {
@@ -103,7 +113,7 @@ public class Sudoku {
 	 * @param row
 	 *          row of the specific position to check
 	 * @param column
-	 *          column of the specifc position to check
+	 *          column of the specific position to check
 	 * @param num
 	 *          number to check
 	 *          
@@ -137,7 +147,7 @@ public class Sudoku {
 	}
 
 	/**
-	 * Prints a sudoku game board.
+	 * Prints a Sudoku game board.
 	 * 
 	 * @param specificBoard
 	 *                 Sudoku game board to print
@@ -147,11 +157,11 @@ public class Sudoku {
 		for (int row = 0; row < specficBoard.length; row++) {
 			for (int column = 0; column < specficBoard[0].length; column++) {
 				if (column != 0 && column % 8 == 0) {
-					if (row % 3 == 2) {
+					if (row == 8) {
+						System.out.print(specficBoard[row][column] + " |" + "\n" + " -----------------------");
+					} else if (row % 3 == 2) {
 						System.out.print(specficBoard[row][column] + " |" + "\n");
 						System.out.print(" -----------------------" + "\n" + "| ");
-					} else if (row == 8) {
-						System.out.print(specficBoard[row][column] + " |" + "\n" + " -----------------------");
 					} else {
 						System.out.print(specficBoard[row][column] + " |" + "\n" + "| ");
 					}
@@ -208,7 +218,7 @@ public class Sudoku {
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
-		SudokuSolve sudoku = new SudokuSolve();
+		Sudoku sudoku = new Sudoku();
 		String play = "y";
 		while (play.equals("y")) {
 			String response1 = "";
