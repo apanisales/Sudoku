@@ -3,13 +3,12 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Class Purpose: Produces a 9x9 Sudoku game board
- * that can be solved
+ * Produces a 9x9 Sudoku game board that a user can solve
  * 
- * @author anthony panisales
+ * @author Anthony Panisales
  *
  */
-public class SudokuSolve {
+public class Sudoku {
 	
 	protected static String[][] board = new String[9][9];
 	protected static String[][] unsolvedBoard = new String[9][9];
@@ -17,19 +16,21 @@ public class SudokuSolve {
 	protected static int[] sudokuNums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 	/**
-	 * Function Purpose: Fills the Sudoku board with numbers
+	 * Fills the Sudoku board with numbers.
+	 * 
+	 * @return true if filling the board was successful, false otherwise
 	 */
 	public boolean fillBoard() {
 		return fillBoard(0,0);
 	}
 	
 	public boolean fillBoard(int row, int column) {
-		//Base Case
+		// Base Case
 		if (row == 9) {
 			return true;
-		} else { //Step Case
-			/*Each spot in the first row has a random number
-			from 1 to 9*/
+		} else { // Step Case
+			/* Each spot in the first row has a random number
+			from 1 to 9 */
 			Random randomNumber = new Random();
 			if (row == 0) {
 				String num = Integer.toString(randomNumber.nextInt(9) + 1);
@@ -44,9 +45,9 @@ public class SudokuSolve {
 						return true;
 				}
 				return false;
-			} else { //Each row after the first reacts to the rows above it
+			} else { // Each row after the first reacts to the rows above it
 				for (int s = 0; s < sudokuNums.length; s++) {
-					/*If a number is not safe to place then the number that follows
+					/* If a number is not safe to place then the number that follows
 					 it in the array sudokuNums will be checked */
 					if (safeToPlace(row, column, Integer.toString(sudokuNums[s]))) {
 						board[row][column] = Integer.toString(sudokuNums[s]);
@@ -65,7 +66,7 @@ public class SudokuSolve {
 	}
 	
 	/**
-	 * Function Purpose: Makes a copy of the original board
+	 * Makes a copy of the original board.
 	 */
 	protected void copyBoard() {
 		for (int i = 0; i < 9; i++) {
@@ -75,11 +76,10 @@ public class SudokuSolve {
 	}
 	
 	/**
-	 * Function Purpose: Hides several numbers on the copy of the
-	 * original board
+	 * Hides several numbers on the copy of the original board.
 	 */
 	protected void hideNums() { 
-		//17 is the minimum number of visible spots on the board
+		// 17 is the minimum number of visible spots on the board
 		int limit = 17, count = 81;
 		Random randomNumber = new Random();
 		for (int row = 0; row < 9; row++) {
@@ -97,26 +97,35 @@ public class SudokuSolve {
 	}
 	
 	/** 
-	 * Function Purpose: Checks if a specific number is safe to
-	 * be placed at a specific spot on the board
+	 * Checks if a specific number is safe to be placed at a specific 
+	 * spot on the board.
+	 * 
+	 * @param row
+	 *          row of the specific position to check
+	 * @param column
+	 *          column of the specifc position to check
+	 * @param num
+	 *          number to check
+	 *          
+	 * @return true if safe to place, false otherwise
 	 */
 	protected boolean safeToPlace(int row, int column, String num) {
 		int startRow = row - (row % 3);
 		int startCol = column - (column % 3);
 		
-		//Check up
+		// Check up
 		for (int i = 1; i <= row; i++) {
 			if (board[row-i][column].equals(num))
 				return false;
 		}
 		
-		//Check left
+		// Check left
 		for (int i = 1; i <= column; i++) {
 			if (board[row][column-i].equals(num))
 				return false;
 		}
 		
-		//Check subgrid
+		// Check subgrid
 		for (int i = startRow; i < row; i++) {
 			for (int j = startCol; j < startCol+3; j++) {
 				if (board[i][j].equals(num))
@@ -128,7 +137,10 @@ public class SudokuSolve {
 	}
 
 	/**
-	 * Function Purpose: Prints a sudoku game board
+	 * Prints a sudoku game board.
+	 * 
+	 * @param specificBoard
+	 *                 Sudoku game board to print
 	 */
 	public void printBoard(String[][] specficBoard) {
 		System.out.print(" -----------------------" + "\n" + "| ");
@@ -153,7 +165,14 @@ public class SudokuSolve {
 	}
 	
 	/**
-	 * Function Purpose: Checks if an integer is in an integer array
+	 * Checks if an integer is in an integer array.
+	 * 
+	 * @param num
+	 *            target integer to be searched for
+	 * @param array
+	 *            array of integers to be searched through
+	 *            
+	 * @return true if array contains target, false otherwise
 	 */
 	protected static boolean contains(int num, int[] array) {
 		for (int i = 0; i < array.length; i++) {
@@ -164,8 +183,14 @@ public class SudokuSolve {
 	}
 	
 	/**
-	 * Function Purpose: Adds a number of the user's choosing
-	 * to the copy of the original board
+	 * Adds a number of the user's choosing to the copy of the original board.
+	 * 
+	 * @param row
+	 *           row to insert number to
+	 * @param column
+	 *           column to insert number to
+	 * @param scan
+	 *           scanner to obtain a number from the user
 	 */
 	protected void solve(String row, String column, Scanner scan) {
 		int num = 0;
