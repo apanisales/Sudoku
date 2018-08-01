@@ -44,15 +44,20 @@ public class Sudoku {
 			Random randomNumber = new Random();
 			if (row == 0) {
 				String num = Integer.toString(randomNumber.nextInt(9) + 1);
-				while (!safeToPlace(row, column, num))
+
+				while (!safeToPlace(row, column, num)) {
 					num = Integer.toString(randomNumber.nextInt(9) + 1);
+				}
+				
 				board[row][column] = num;
 				if (column != 8) {
-					if (fillBoard(row, column+1))
+					if (fillBoard(row, column+1)) {
 						return true;
+					}
 				} else {
-					if (fillBoard(row+1, 0))
+					if (fillBoard(row+1, 0)) {
 						return true;
+					}
 				}
 				return false;
 			} else { // Each row after the first reacts to the rows above it
@@ -62,11 +67,13 @@ public class Sudoku {
 					if (safeToPlace(row, column, Integer.toString(sudokuNums[s]))) {
 						board[row][column] = Integer.toString(sudokuNums[s]);
 						if (column != 8) {
-							if (fillBoard(row, column+1))
+							if (fillBoard(row, column+1)) {
 								return true;
+							}
 						} else {
-							if (fillBoard(row+1, 0))
+							if (fillBoard(row+1, 0)) {
 								return true;
+							}
 						}
 					}
 				}
@@ -80,8 +87,9 @@ public class Sudoku {
 	 */
 	protected void copyBoard() {
 		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++)
+			for (int j = 0; j < 9; j++) {
 				unsolvedBoard[i][j] = board[i][j];
+			}
 		}
 	}
 	
@@ -125,21 +133,24 @@ public class Sudoku {
 		
 		// Check up
 		for (int i = 1; i <= row; i++) {
-			if (board[row-i][column].equals(num))
+			if (board[row-i][column].equals(num)) {
 				return false;
+			}
 		}
 		
 		// Check left
 		for (int i = 1; i <= column; i++) {
-			if (board[row][column-i].equals(num))
+			if (board[row][column-i].equals(num)) {
 				return false;
+			}
 		}
 		
 		// Check subgrid
 		for (int i = startRow; i < row; i++) {
 			for (int j = startCol; j < startCol+3; j++) {
-				if (board[i][j].equals(num))
+				if (board[i][j].equals(num)) {
 					return false;
+				}
 			}
 		}
 		
@@ -167,8 +178,9 @@ public class Sudoku {
 					}
 				} else {
 					System.out.print(specficBoard[row][column] + " ");
-					if (column % 3 == 2)
+					if (column % 3 == 2) {
 						System.out.print("| ");
+					}
 				}
 			}
 		}
@@ -186,8 +198,9 @@ public class Sudoku {
 	 */
 	protected static boolean contains(int num, int[] array) {
 		for (int i = 0; i < array.length; i++) {
-			if (num == array[i])
+			if (num == array[i]) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -235,17 +248,24 @@ public class Sudoku {
 					System.out.println("The rows and the columns are from 1-9");
 					System.out.print("Row: ");
 					response1 = scan.next().toLowerCase();
-					if (response1.equals("answer"))
+
+					if (response1.equals("answer")){
 						break;
+					}
+
 					System.out.print("Column: ");
 					response2 = scan.next().toLowerCase();
-					if (response2.equals("answer"))
+
+					if (response2.equals("answer")) {
 						break;
+					}
+
 					if (contains(Integer.parseInt(response1), sudokuNums) && contains(Integer.parseInt(response2), sudokuNums)) {
-						if (!xBoard[Integer.parseInt(response1)-1][Integer.parseInt(response2)-1].equals("x"))
+						if (!xBoard[Integer.parseInt(response1)-1][Integer.parseInt(response2)-1].equals("x")) {
 							System.out.println("That spot has a fixed number");
-						else
+						} else {
 							sudoku.solve(response1, response2, scan);
+						}
 					} else {
 						System.out.println("No such row and/or column exists");
 					}
