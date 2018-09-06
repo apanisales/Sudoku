@@ -3,7 +3,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * Produces a 9x9 Sudoku game board that a user can solve
+ * Command line application that produces a 9x9 Sudoku game board 
+ * that a user can solve. Implements a recursive backtracking algorithm 
+ * to create the Sudoku puzzle.
  * 
  * @author Anthony Panisales
  *
@@ -35,10 +37,11 @@ public class Sudoku {
 	 * @return true if filling the board was successful, false otherwise
 	 */
 	public boolean fillBoard(int row, int column) {
-		// Base Case
-		if (row == 9) {
+		if (row == 9) { 
+			// Base Case
 			return true;
-		} else { // Step Case
+		} else { 
+			// Step Case
 			/* Each spot in the first row has a random number
 			from 1 to 9 */
 			Random randomNumber = new Random();
@@ -60,7 +63,8 @@ public class Sudoku {
 					}
 				}
 				return false;
-			} else { // Each row after the first reacts to the rows above it
+			} else { 
+				// Each row after the first reacts to the rows above it
 				for (int s = 0; s < sudokuNums.length; s++) {
 					/* If a number is not safe to place then the number that follows
 					 it in the array sudokuNums will be checked */
